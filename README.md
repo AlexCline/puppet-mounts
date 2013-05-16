@@ -3,11 +3,24 @@ mounts
 
 The mounts module will help manage mount points on linux systems.
 
+This module depends on the [AlexCline-dirtree](http://forge.puppetlabs.com/AlexCline/dirtree) and [AlexCline-fstab](http://forge.puppetlabs.com/AlexCline/fstab) modules.  Installing with
+`puppet module install` will install the required dependencies.
+
 Examples
 --------
 
+     mounts { 'Mount point for NFS data':
+       ensure => present,
+       source => 'host.example.com:/data',
+       dest   => '/opt/data',
+       type   => 'nfs',
+       opts   => 'nofail,defaults,noatime',
+     }
 
+ToDo
+----
 
+`ensure => absent` doesn't work yet.  That'll come in a new release soon.
 
 Support
 -------

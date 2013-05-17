@@ -24,10 +24,6 @@ define mounts (
   case $::operatingsystem {
     redhat, centos, amazon: {
 
-      # Ensure the entire tree of the destination has been created.
-      $dirtree = dirtree($dest)
-      ensure_resource('file', $dirtree, {'ensure' => 'directory'})
-
       fstab { "fstab entry for ${source} to ${dest} as ${type}":
         source => $source,
         dest   => $dest,
@@ -36,13 +32,28 @@ define mounts (
         ensure => $ensure,
       }
 
-      exec { "/bin/mount '${dest}'":
-        unless  => "/bin/mount -l | /bin/grep '${dest}'",
-        require => [File[$dirtree], Fstab["fstab entry for ${source} to ${dest} as ${type}"]],
-      }
+      case $ensure {
+        'present': {
+          # Ensure the entire tree of the destination has been created.
+          $dirtree = dirtree($dest)
+          ensure_resource('file', $dirtree, {'ensure' => 'directory'})
+
+          exec { "/bin/mount '${dest}'":
+            unless  => "/bin/mount -l | /bin/grep '${dest}'",
+            require => [File[$dirtree], Fstab["fstab entry for ${source} to ${dest} as ${type}"]],
+          }
+        }
+        'absent': {
+          exec { "/bin/umount '${dest}'":
+            onlyif => "/bin/mount -l | /bin/grep '${dest}'",
+            before => Fstab["fstab entry for ${source} to ${dest} as ${type}"],
+          }
+          # Note: we won't remove the directory since we don't know if it'll destroy data
+          notice { "${dest} wasn't removed after being unmounted.  Please remove it manually.": }
+        }
 
     }
-    default: { error('Your OS isn\'t supported by the fstab module yet.') }
+    default: { error('Your OS isn\'t supported by the mounts module yet.') }
   }
 
 }

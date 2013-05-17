@@ -6,6 +6,10 @@ The mounts module will help manage mount points on linux systems.
 This module depends on the [AlexCline-dirtree](http://forge.puppetlabs.com/AlexCline/dirtree) and [AlexCline-fstab](http://forge.puppetlabs.com/AlexCline/fstab) modules.  Installing with
 `puppet module install` will install the required dependencies.
 
+*Note: If using ensure=>absent, the destination directory will not be
+automatically removed.  A notice will be displayed on the client about
+removing the directory manually.
+
 Examples
 --------
 
@@ -17,10 +21,6 @@ Examples
        opts   => 'nofail,defaults,noatime',
      }
 
-ToDo
-----
-
-`ensure => absent` doesn't work yet.  That'll come in a new release soon.
 
 Support
 -------

@@ -51,7 +51,7 @@ define mounts (
           # Note: we won't remove the directory since we don't know if it'll destroy data
           notice { "${dest} wasn't removed after being unmounted.  Please remove it manually.": }
         }
-
+      }
     }
     default: { error('Your OS isn\'t supported by the mounts module yet.') }
   }

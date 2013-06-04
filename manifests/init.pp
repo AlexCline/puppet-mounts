@@ -34,9 +34,20 @@ define mounts (
 
       if $type == 'nfs' {
         ensure_resource('package', 'nfs-utils', {'ensure' => 'present'})
-        if $::operatingsystemmajrelease == '6' {
-          ensure_resource('package', 'rpcbind', {'ensure' => 'present'})
-          ensure_resource('service', 'rpcbind', {'ensure' => 'present', 'require' => 'Package["rpcbind"]'})
+        case $::operatingsystemmajrelease {
+          '6': {
+            ensure_resource('package', 'rpcbind', {'ensure' => 'present'})
+            ensure_resource('service', 'rpcbind', {'ensure' => 'running'})
+            Package['rpcbind'] -> Service['rpcbind']
+          }
+          '5': {
+            ensure_resource('package', 'portmap', {'ensure' => 'present'})
+            ensure_resource('service', 'portmap', {'ensure' => 'running'})
+            Package['portmap'] -> Service['portmap']
+          }
+          default: {
+            alert('Unsupported version of OS')
+          }
         }
       }
 

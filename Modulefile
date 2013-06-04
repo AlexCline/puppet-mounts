@@ -1,5 +1,5 @@
 name    'AlexCline-mounts'
-version '0.2.0'
+version '0.3.0'
 author 'Alex Cline <alex.cline@gmail.com>'
 license 'Apache License, Version 2.0'
 summary 'The mounts module will help manage mount points on linux systems.'

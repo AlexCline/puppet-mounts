@@ -25,11 +25,19 @@ define mounts (
     redhat, centos, amazon: {
 
       fstab { "fstab entry for ${source} to ${dest} as ${type}":
+        ensure => $ensure,
         source => $source,
         dest   => $dest,
         type   => $type,
         opts   => $opts,
-        ensure => $ensure,
+      }
+
+      if $type == 'nfs' {
+        ensure_resource('package', 'nfs-utils', {'ensure' => 'present'})
+        if $::operatingsystemmajrelease == '6' {
+          ensure_resource('package', 'rpcbind', {'ensure' => 'present'})
+          ensure_resource('service', 'rpcbind', {'ensure' => 'present', 'require' => 'Package["rpcbind"]'})
+        }
       }
 
       case $ensure {
@@ -48,9 +56,11 @@ define mounts (
             onlyif => "/bin/mount -l | /bin/grep '${dest}'",
             before => Fstab["fstab entry for ${source} to ${dest} as ${type}"],
           }
+
           # Note: we won't remove the directory since we don't know if it'll destroy data
           notice { "${dest} wasn't removed after being unmounted.  Please remove it manually.": }
         }
+        default: { }
       }
     }
     default: { error('Your OS isn\'t supported by the mounts module yet.') }

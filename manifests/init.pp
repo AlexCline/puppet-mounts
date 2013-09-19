@@ -30,6 +30,8 @@ define mounts (
         dest   => $dest,
         type   => $type,
         opts   => $opts,
+        dump   => $dump,
+        passno => $passno,
       }
 
       if $type == 'nfs' {

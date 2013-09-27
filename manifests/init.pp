@@ -74,7 +74,7 @@ define mounts (
         default: { }
       }
     }
-    default: { error('Your OS isn\'t supported by the mounts module yet.') }
+    default: { err('Your OS isn\'t supported by the mounts module yet.') }
   }
 
 }

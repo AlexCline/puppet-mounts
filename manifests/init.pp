@@ -10,15 +10,15 @@ define mounts (
   $ensure = 'present'){
 
   if $source == undef {
-    error('The source parameter is required.')
+    err('The source parameter is required.')
   }
 
   if $dest == undef {
-    error('The dest parameter is required.')
+    err('The dest parameter is required.')
   }
 
   if $type == undef {
-    error('The type parameter is required.')
+    err('The type parameter is required.')
   }
 
   case $::operatingsystem {
@@ -69,12 +69,12 @@ define mounts (
           }
 
           # Note: we won't remove the directory since we don't know if it'll destroy data
-          notice { "${dest} wasn't removed after being unmounted.  Please remove it manually.": }
+          notify { "${dest} wasn't removed after being unmounted.  Please remove it manually.": }
         }
         default: { }
       }
     }
-    default: { error('Your OS isn\'t supported by the mounts module yet.') }
+    default: { err('Your OS isn\'t supported by the mounts module yet.') }
   }
 
 }

@@ -6,6 +6,12 @@ The mounts module will help manage mount points on linux systems.
 This module depends on the [AlexCline-dirtree](http://forge.puppetlabs.com/AlexCline/dirtree) and [AlexCline-fstab](http://forge.puppetlabs.com/AlexCline/fstab) modules.  Installing with
 `puppet module install` will install the required dependencies.
 
+It also depends on [puppetlabs-stdlib](https://github.com/puppetlabs/puppetlabs-stdlib/tree/4.1.0) 4.x 
+or higher, because of the use of us of the following functions:
+
+`concat()` in [AlexCline-fstab](http://forge.puppetlabs.com/AlexCline/fstab) and `ensure_resource()` in this Module (in puppetlabs-stdlib 3.x `ensure_resource()` can only be used with a string not with an array.
+
+
 *Note: If using ensure=>absent, the destination directory will not be
 automatically removed.  A notice will be displayed on the client about
 removing the directory manually.

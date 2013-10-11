@@ -1,10 +1,10 @@
-nfs { 'Test NFS mount':
+mounts { 'Test NFS mount':
   source => '/dev/sdb2',
   dest   => '/a/path/to/data',
   type   => 'ext4'
 }
 
-nfs { 'Another test NFS mount':
+mounts { 'Another test NFS mount':
   ensure => present,
   source => 'host.example.com',
   dest   => '/a/path/to/more/data',
@@ -12,7 +12,7 @@ nfs { 'Another test NFS mount':
   opts   => 'ro,defaults,noatime,nofail',
 }
 
-nfs { 'Remove another test NFS mount':
+mounts { 'Remove another test NFS mount':
   ensure => absent,
   source => 'host.example.com',
   dest   => '/a/path/to/more/data',
